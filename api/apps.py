@@ -6,3 +6,4 @@ from django.apps import AppConfig
 
 class ApiConfig(AppConfig):
     name = 'api'
+    icon = '<i class="material-icons">assignment_turned_in</i>'

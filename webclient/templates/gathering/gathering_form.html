@@ -9,17 +9,35 @@
 		<meta name="description" content="Fullscreen Form Interface: A distraction-free form concept with fancy animations" />
 		<meta name="keywords" content="fullscreen form, css animations, distraction-free, web design" />
 		<meta name="author" content="Codrops" />
-		<link rel="shortcut icon" href="{% static 'assets/favicon.png' %}">
+        <link rel="shortcut icon" href="{% static 'assets/favicon.png' %}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/normalize.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/form.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/component.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/cs-select.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/cs-skin-boxes.css' %}" />
 		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.12.17/sweetalert2.min.css">
-		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
 		<script src="{% static 'assets/js/modernizr.custom.js' %}"></script>
 	</head>
 	<body>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="{% url 'webclient:home' %}">FORMULAR</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'webclient:home' %}">Home </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'webclient:start-gathering' %}">Toma de requerimientos<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
 		<img class="body-icon" />
 		<div class="container">
@@ -181,13 +199,13 @@
 									name: elementId
                                 });
                             case 'BO':
-								return $('<input/>').attr({
+                                return check = $('<input/>').attr({
 									required: true,
 									type: 'checkbox',
 									id: 'check_' + elementId,
 									class: 'form-validate',
-                                    name: elementId
-								});
+                                    name: elementId,
+                                });
 						}
 					}
 
@@ -363,7 +381,8 @@
 							});
 						})
 				});
-			});
+            });
+            $()
 		</script>
 	</body>
 </html>

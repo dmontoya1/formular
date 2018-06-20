@@ -26,7 +26,7 @@ class UserAdmin(django_user_admin):
         'document_id'
     )
     list_display = (
-        'email', 'user_type', 'first_name', 'last_name',
+        'username', 'email', 'user_type', 'first_name', 'last_name',
     )
 
     fieldsets = (
@@ -37,7 +37,7 @@ class UserAdmin(django_user_admin):
         (_('Persmisos'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                      'groups')}),
         (_('Información Adicional'),
-         {'fields': ('document_type', 'document_id', 'email_validated', 'cellphone',)})
+         {'fields': ('document_type', 'document_id', 'cellphone',)})
     )
 
     def get_queryset(self, request):

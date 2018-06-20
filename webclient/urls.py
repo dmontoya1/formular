@@ -1,13 +1,14 @@
 from django.urls import path, include
-from .views import (
-    HomePageView,
-    StartGathering,
-    GatheringForm
-)
+from django.contrib.auth import views as auth_views
+
+from . import views
+
 
 app_name = 'webclient'
 urlpatterns = [
-    path('', HomePageView.as_view(), name='home'),
-    path('start-gathering/', StartGathering.as_view(), name="start-gathering"),
-    path('gathering-form/', GatheringForm.as_view(), name="gathering-form"),
+    path('', views.HomePageView.as_view(), name='home'),
+    path('start-gathering/', views.StartGathering.as_view(), name="start-gathering"),
+    path('gathering-form/', views.GatheringForm.as_view(), name="gathering-form"),
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page="/"), name='logout'),
 ]

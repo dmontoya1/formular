@@ -83,10 +83,10 @@ class Form(models.Model):
     """
 
     date = models.DateField("Fecha Diligenciamiento", auto_now=True)
-    company = models.ForeignKey(
-        Company,
-        verbose_name="Compañia",
-        related_name="related_companies_forms",
+    user = models.ForeignKey(
+        User,
+        verbose_name="Usuario",
+        related_name="related_users_forms",
         on_delete=models.CASCADE)
 
     class Meta:
@@ -94,7 +94,7 @@ class Form(models.Model):
         verbose_name_plural = "Formularios"
 
     def __str__(self):
-        return "%s" % (self.company.name)
+        return "%s" % (self.user.email)
 
 
 class Answer(models.Model):

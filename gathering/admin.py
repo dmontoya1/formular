@@ -96,10 +96,10 @@ class FormAdmin(admin.ModelAdmin):
     icon = '<i class="material-icons">assignment</i>'
     inlines = [AnswerAdmin,]
     search_fields = (
-        'date', 'company__name', 'company__nit',
+        'date', 'user__first_name', 'user__last_name',
     )
     list_display = (
-        'date', 'company',
+        'date', 'user',
     )
 
 

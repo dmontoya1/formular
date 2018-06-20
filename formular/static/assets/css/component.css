@@ -244,7 +244,7 @@ button.fs-continue,
 	border: none;
 	border-bottom: 2px solid rgba(0,0,0,0.2);
 	background-color: transparent;
-	color: #dce9e9;
+	color: #777;
 	text-overflow: ellipsis;
 	font-weight: bold;
 	font-size: 1.5em;
@@ -264,6 +264,7 @@ button.fs-continue,
 	background-position: top right;
 	background-size: 18px;
 	background-repeat: no-repeat;
+	color: #777;
 }
 
 .fs-fields input:focus {

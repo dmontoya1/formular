@@ -14,6 +14,7 @@ from .models import Category, Question, QuestionChoice, Form, Answer
 from .serializers import CategorySerializer, QuestionSerializer, QuestionChoiceSerializer,\
                          FormSerializer, AnswerSerializer, QuestionDetailSerializer,\
                          FullQuestionsSerializer
+from users.models import Company
 
 
 class CategoryList(generics.ListAPIView):
@@ -107,27 +108,30 @@ class AnswerCreate(APIView):
             patient=user
         )
         form.save()
+        if form is not None:
+            for answer in request.data:
+                question = Question.objects.get(pk=answer['question'])
+                if question.question_type != Question.SELECCION:
+                    instance = Answer(
+                        form=form,
+                        question=question,
+                        value=answer['value']
+                    )
+                    instance.save()
+                else:
+                    choice = QuestionChoice.objects.get(pk=answer['value'])
+                    instance = Answer(
+                        form=form,
+                        question=question,
+                        value=str(choice.value),
+                        choice=answer['value']
+                    )
+                    instance.save()
 
+            response = {'detail': "Formulario creado correctamente"}
+            stat = status.HTTP_201_CREATED
+        else:
+            response = {'detail': "No se encuentra la empresa solicitada"}
+            stat = status.HTTP_400_BAD_REQUEST
 
-        for answer in request.data:
-            question = Question.objects.get(pk=answer['question'])
-            if question.question_type != Question.SELECCION:
-                instance = Answer(
-                    form=form,
-                    question=question,
-                    value=answer['value']
-                )
-                instance.save()
-            else:
-                choice = QuestionChoice.objects.get(pk=answer['value'])
-                instance = Answer(
-                    form=form,
-                    question=question,
-                    value=str(choice.value),
-                    choice=answer['value']
-                )
-                instance.save()
-
-        response = {'detail': "Formulario creado correctamente"}
-
-        return Response(response, status=status.HTTP_201_CREATED)
+        return Response(response, status=stat)

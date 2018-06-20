@@ -1,0 +1,369 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<title>Formulario</title>
+		<meta name="description" content="Fullscreen Form Interface: A distraction-free form concept with fancy animations" />
+		<meta name="keywords" content="fullscreen form, css animations, distraction-free, web design" />
+		<meta name="author" content="Codrops" />
+		<link rel="shortcut icon" href="{% static 'assets/favicon.png' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/normalize.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/form.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/component.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/cs-select.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'assets/css/cs-skin-boxes.css' %}" />
+		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.12.17/sweetalert2.min.css">
+		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
+		<script src="{% static 'assets/js/modernizr.custom.js' %}"></script>
+	</head>
+	<body>
+
+		<img class="body-icon" />
+		<div class="container">
+			<form id="form">
+				
+			</form>
+		</div><!-- /container -->
+		<script
+		src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.12.17/sweetalert2.min.js"></script>
+		<script src="{% static 'assets/js/jquery.steps.min.js' %}"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+		<script>
+			jQuery(function($) {
+				$.ajaxSetup({
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader('Api-Key', 'a7e9e6940ca7f5e8a8ccfe0ff9df6fc618a980e4');
+					}
+				});
+
+				$.fn.serializeFormJSON = function () {
+					var o = {};
+					var a = this.serializeArray();
+					$.each(a, function () {
+						if (o[this.name]) {
+							if (!o[this.name].push) {
+								o[this.name] = [o[this.name]];
+							}
+							o[this.name].push(this.value || '');
+						} else {
+							o[this.name] = this.value || '';
+						}
+					});
+					return o;
+				};
+
+				$.fn.serializeFormToBackend = function() {
+					var d = [];
+					var f = this.serializeArray();
+					$.each(f, function(){
+						a = {};
+						a['question'] = this.name 
+						a['value'] = this.value 
+						d.push(a);
+					})
+					return d;
+			  	}
+				
+				function log(element){
+					return console.log(element);
+				}
+
+				function getIndexCategory(index){
+					categoryContent = $('#content-step-' + index)
+					return categoryContent.data('category');
+				}
+				
+				function addCategories(form){
+					function getCategories(){
+						var promise = new Promise(function(fulfill, reject){
+							$.get( "{% url 'api:api-gathering:category-list' %}")
+								.done(function(data){fulfill(data)})
+								.fail(function(data){reject(data.status)});
+						});
+						return promise
+					}
+
+					function injectCategories(data){
+						data.forEach(function(element, index){
+							form.steps("insert", index, {
+								title: element.name,
+								content: "<div data-ready=" + false + " data-category=" + element.id + " data-theme=" + element.theme + " id=content-step-" + index + " class='fs-fields'></div>"
+							});
+						});
+						addQuestions(0); //Add questions for the first category
+					}
+
+					function categoriesGetterErrorHandler(error){
+						console.log('Unable to get categories. Server returned an HTTP ' + error);
+					}
+
+					var categoriesGetterPromise = getCategories();
+					
+					categoriesGetterPromise.then(function(data){
+						injectCategories(data);
+					}, function(xhrStatus){
+						categoriesGetterErrorHandler(xhrStatus);
+					});
+					
+				}
+
+				function addQuestions(index){
+					categoryId = getIndexCategory(index);
+					
+					function addSelectOptions(select){
+						setTimeout(function(){
+							$.get("/api/gathering/questions/" + select.attr('id').split("select_").join("") + "/choices/")
+								.done(function (data) {
+									data.forEach(function (option, i) {
+										op = $('<option>', {
+												value: option.id,
+												text: option.value,
+											})
+										if(option.dependant_question && option.dependant_question.length > 0){
+											op.attr('data-depedendants', option.dependant_question);
+										}										
+										select.append(op);
+									});
+									select.append($('<option>', {
+										text: 'Seleccione una opción',
+										selected: true,
+										disabled: true,
+										value: ""
+									}))
+									select.on('change', function(){
+										$('.parent-question-' + select.attr('id')).remove();
+										selectedOption = $(this).find('option:selected').first();
+										if(selectedOption.data('depedendants')){
+											var numbersString = selectedOption.data('depedendants')
+											var numbersArray = numbersString.split(',');
+											numbersArray.forEach(function(e, i){
+												getQuestions(undefined, e).then(function(data){
+													injectElements(data, index, true, select);
+												}, function(status){
+													log(status);
+												})
+											});
+										}
+									});
+								});
+						}, 1000);
+						
+						
+					}
+					
+					function createElement(elementType, elementId){
+						switch (elementType) {
+							case 'SE':
+								return $('<select/>').attr({
+									required: true,
+									id: 'select_' + elementId,
+									class: 'styled-select form-validate',
+									name: elementId
+								});
+							case 'TA':
+								return $('<input/>').attr({
+									required: true,
+									type: 'text',
+									class: 'fs-anim-lower form-validate',
+									id: 'input_' + elementId,
+									name: elementId
+								});
+							case 'FE':
+								return $('<input/>').attr({
+									required: true,
+									type: 'date',
+									id: 'date_' + elementId,
+									class: 'form-validate',
+									name: elementId
+                                });
+                            case 'BO':
+								return $('<input/>').attr({
+									required: true,
+									type: 'checkbox',
+									id: 'check_' + elementId,
+									class: 'form-validate',
+                                    name: elementId
+								});
+						}
+					}
+
+					function createElementLabel(title, elementId){
+						label = $('<label/>').attr({
+							class: 'fs-field-label fs-anim-upper',
+							for: elementId
+						}); 
+						label.html(title)
+						return label
+					}
+
+					function getQuestions(categoryId, questionId){
+						var promise = new Promise(function(resolve, reject){
+							if(questionId){
+								url = '/api/gathering/question/' + questionId 
+							} else {
+								url = '/api/gathering/categories/' + categoryId + '/questions/'
+							}
+							$.get(url)
+								.done(function(data){resolve(data)})
+								.fail(function(data){reject(data.status)});
+						});
+						return promise
+					}
+
+					function injectElements(elementList, index, dependant, parentSelect){
+						categoryContent = $('#content-step-' + index);
+						
+						if (!categoryContent.data('ready') || dependant == true){
+							elementList.forEach(function(element, index){
+								container = $('<div/>').attr({
+									class: 'question-container'
+								});
+
+								input = createElement(element.question_type, element.id);
+								label =	createElementLabel(element.context, element.id);
+
+								container.append(label, input);
+								
+								if(dependant == true){
+									container.addClass('parent-question-' + parentSelect.attr('id'))
+									parentSelect.parent().after(container);
+								} else {
+									categoryContent.append(container);
+								}
+
+								if(input.prop('nodeName') == "SELECT"){
+									addSelectOptions(input);
+								}
+
+								if(index == 0){
+									input.focus();
+								}
+							});
+						}
+
+						categoryContent.data('ready', true);
+
+					}
+
+					function questionGetterErrorHandler(){
+						console.log('Unable to get questions. Server returned an HTTP ' + error);
+					}
+
+					var questionsGetterPromise = getQuestions(categoryId);
+
+					questionsGetterPromise.then(function(data){
+						injectElements(data, index);
+					}, function(xhrStatus){
+						questionGetterErrorHandler(xhrStatus);
+					}).then(function(){
+						addSelectOptions()
+					});
+				}
+				
+				function loadDependantQuestions(question){
+					function makeRequest(method, url, done) {
+						var xhr = new XMLHttpRequest();
+						xhr.open(method, url);
+						xhr.onload = function () {
+							done(null, xhr.response);
+						};
+						xhr.onerror = function () {
+							done(xhr.response);
+						};
+						xhr.send();
+					}
+					makeRequest('GET', '/api/questions/', function (err, datums) {
+						if (err) { throw err; }
+						console.log(datums);
+					});
+                }
+                
+				function validateSection(currentIndex, newIndex){
+					if(newIndex){
+						if (newIndex < currentIndex) {
+							return true;
+						}
+					}
+				
+					var isValid = true;
+					
+					$($('#content-step-' + currentIndex)).find('.form-validate').each(function () {
+						if($(this).val() === '' || $(this).val() === null){
+							isValid = false;
+						}				
+					});
+
+					if(isValid == false){
+						$.toast({
+							heading: 'Campos incompletos',
+							text: 'Todos los campos son obligatorios',
+							icon: 'info',
+							position: 'top-right'    
+						})
+					}
+
+					return isValid;
+				}
+
+				form = $("#form").steps({
+					labels: {
+						cancel: "Cancelar",
+						current: "Pregunta actual:",
+						pagination: "Paginación",
+						finish: "Finalizar",
+						next: "Siguiente",
+						previous: "Anterior",
+						loading: "Cargando ..."
+					},
+					onInit: function(e, currentIndex){
+						addCategories($(this));
+					},
+					onStepChanging: function (e, currentIndex, newIndex) {
+						return validateSection(currentIndex, newIndex);
+					},
+					onStepChanged: function(e, currentIndex, priorIndex){
+						addQuestions(currentIndex);
+					},
+					onFinishing: function(e, currentIndex){
+						return validateSection(currentIndex);
+					},
+					onFinished: function(e, currentIndex){
+						$('#form').submit();	
+					}
+				});
+
+				$('#form').on('submit', function(e){
+					e.preventDefault();
+					data = $(this).serializeFormToBackend();
+					data = JSON.stringify(data)
+					$.ajax({
+						type: "POST",
+						url: "{% url 'api:api-gathering:answer-create' %}",
+						data: data,
+						contentType: 'application/json'
+					})
+						.done(function(data){
+							swal({
+								type: 'success',
+								title: 'Verificación exitosa',
+								text: data.risk
+							}).then((result) => {
+								window.location.replace("{% url 'webclient:home' %}");
+							})
+						}) 
+						.fail(function (xhr) {
+							swal({
+								type: 'info',
+								title: 'Verificación no exitosa',
+								text: 'Ocurrió un error al intentar obtener el resultado. Código de respuesta: ' + xhr.status
+							});
+						})
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -18,7 +18,7 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'bootstrap_admin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -26,11 +26,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+THIRD_PARTY_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
+]
+
+PROJECT_APPS = [
     'api',
     'gathering',
     'users',
     'webclient'
 ]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -117,3 +127,13 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'formular/media')
+
+# DRF Config
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'api.permissions.HasAPIAccess',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}

@@ -1,0 +1,314 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,700);
+@font-face {
+	font-weight: normal;
+	font-style: normal;
+	font-family: 'codropsicons';
+	src:url('../fonts/codropsicons/codropsicons.eot');
+	src:url('../fonts/codropsicons/codropsicons.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/codropsicons/codropsicons.woff') format('woff'),
+		url('../fonts/codropsicons/codropsicons.ttf') format('truetype'),
+		url('../fonts/codropsicons/codropsicons.svg#codropsicons') format('svg');
+}
+
+*, *:after, *:before { -webkit-box-sizing: border-box; box-sizing: border-box; }
+.clearfix:before, .clearfix:after { content: ''; display: table; }
+.clearfix:after { clear: both; }
+*:focus {
+    outline: none !important;
+}
+
+/* For the "inset" look only */
+html {
+    overflow: auto;
+}
+body {
+    overflow-y: scroll;
+	overflow-x: hidden;
+	
+}
+
+/* Let's get this party started */
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.5); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(0,0,0,0.5); 
+}
+
+html, body, .container {
+	height: 100%;
+	width: 95%;
+	margin: 0 auto;
+	overflow-y: hidden;
+}
+
+body {
+	background: #9dd0d0;
+	color: #fff;
+	font-weight: 400;
+	font-size: 1em;
+	font-family: 'Raleway', Arial, sans-serif;
+	overflow: hidden;
+	min-height: 590px;
+	-webkit-transition: background-color 0.5s linear;
+    -ms-transition: background-color 0.5s linear;
+    transition: background-color 0.5s linear;
+}
+
+body .body-icon {
+	position: absolute;
+	width: 300px !important;
+	z-index: -999;
+	left: -5%;
+	bottom: -8%;
+	-webkit-transition:  0.5s ease-in-out;
+    -ms-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+}
+	@media screen and (min-width: 320px) and (max-width: 424px) {
+		body .body-icon {
+			width: 180px !important;
+			left: -80px;
+			bottom: -3%;
+		}
+	}
+	@media screen and (min-width: 425px) and (max-width: 767px){
+		body .body-icon {
+			width: 190px !important;
+			left: -50px;
+			bottom: -10%;
+		}
+	}
+	@media screen and (min-width: 768px) and (max-width: 1023px){
+		body .body-icon {
+			width: 180px !important;
+			left: -40px;
+			bottom: -6%;
+		}
+	}
+
+a {
+	color: rgba(0,0,0,0.3);
+	text-decoration: none;
+	outline: none;
+}
+
+a:hover, a:focus {
+	color: #fff;
+}
+
+/* Top Navigation Style */
+.actions ul {
+	position: absolute;
+	bottom: 4%;
+	right: 10%;
+}
+	@media screen and (max-height: 680px){
+		.actions ul {
+			bottom: 1%;
+		}
+	}
+	.actions ul li {
+		display: inline-block;
+		margin: 1em;
+		border: 1px solid snow;
+		padding: 1em;
+		border-radius: 10px;
+		-webkit-transition: 0.5s ease-in-out;
+		-ms-transition: 0.5s ease-in-out;
+		transition: 0.5s ease-in-out;
+	}
+		.actions ul li a {
+			color: #fff;
+			outline: 0;
+			font-size: 1.1em;
+			-webkit-transition: 0.5s ease-in-out;
+			-ms-transition: 0.5s ease-in-out;
+			transition: 0.5s ease-in-out;
+		}
+
+.body {
+	position: absolute;
+	left: 50%;
+	bottom: 30%;
+	line-height: 25px;
+	margin: -50px 0 0 -25%;
+	width: 60vw;
+	height: 420px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding: 5px;
+}
+	@media screen and (max-height: 680px){
+		.body{
+			bottom: 20%;
+			height: 380px;
+		}
+	}
+
+.body:not(.current){
+	display: none;
+}
+
+.codrops-top {
+	margin-top: 1em;
+}
+
+.codrops-top a {
+	font-size: 0.69em;
+	padding: 0 0.25em;
+	display: inline-block;
+	text-decoration: none;
+	font-size: 1.2em;
+}
+
+.codrops-icon:before {
+	margin: 0 4px;
+	text-transform: none;
+	font-weight: normal;
+	font-style: normal;
+	font-variant: normal;
+	font-family: 'codropsicons';
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+
+.codrops-icon-drop:before {
+	content: "\e001";
+}
+
+.codrops-icon-prev:before {
+	content: "\e004";
+}
+
+.codrops-icon-info:before {
+	content: "\e003";
+}
+
+.codrops-icon span {
+	display: none;
+	position: absolute;
+	font-size: 0.85em;
+	padding: 0.5em 0 0 0.25em;
+	font-weight: 700;
+}
+
+.codrops-icon:hover span {
+	display: block;
+	color: #6a7b7e;
+}
+
+.fs-fields {
+	max-height: 600px;
+	text-align: center;
+}
+
+.fs-fields input,
+.fs-fields select {
+	width: 100%;
+}
+
+.fs-fields .fs-field-label.fs-anim-upper {
+	margin-bottom: 10px;
+	display: block;
+	font-size: 1.2em;
+	color: rgb(101, 101, 101);
+	float: left;
+}
+
+/* Related demos */
+.related {
+	font-weight: 700;
+	text-align: center;
+	padding: 5em 0;
+	display: none;
+	background: #fff;
+	color: rgba(0,0,0,0.3);
+}
+
+.overview .related {
+	display: block;
+}
+
+.related > a {
+	border: 3px solid black;
+	border-color: initial;
+	display: inline-block;
+	text-align: center;
+	margin: 20px 10px;
+	padding: 25px;
+}
+
+.related > a:hover,
+.related > a:focus {
+	color: rgba(0,0,0,0.5);
+}
+
+.related a img {
+	max-width: 100%;
+	opacity: 0.8;
+}
+
+.related a:hover img,
+.related a:active img {
+	opacity: 1;
+}
+
+.related a h3 {
+	margin: 0;
+	padding: 0.5em 0 0.3em;
+	max-width: 300px;
+	text-align: left;
+}
+
+.steps {
+	display: none;
+}
+
+.styled-select {
+	height: 60px;
+	overflow: hidden;
+	margin: .5em auto;
+	padding: 10px;
+	font-size: 1.45em;
+ }
+
+.title {
+	-webkit-transition: 0.2s ease-in-out;
+    -ms-transition: 0.2s ease-in-out;
+    transition: 0.2s ease-in-out;
+}
+@media screen and (max-height: 680px){
+	.title {
+		font-size: 1.6em;
+		margin-bottom: 1em;
+	}
+}
+
+.title:not(.current){
+	display: none;
+}
+
+.question-container {
+	margin: 0 auto;
+}
+
+.question-container:not(:last-child){
+	margin-bottom: 4em;
+}
+

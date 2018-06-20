@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls import url, include
+from django.urls import path, include
 from . import views
 
 app_name = 'api'
 urlpatterns = [
-    url(r'^api-key/', views.ApiKeyDetailView.as_view(), name='api-key'),
-    url(r'^docs/', include('rest_framework_docs.urls')),
-    url(r'^manager/', include('manager.urls', namespace="api-manager")),
-    url(r'^pathologies_tracking/', include('pathologies_tracking.urls', namespace="api-pathologies_tracking")),
-    url(r'^users/', include('users.urls')),
+    path('', include('webclient.urls'), name='webclient'),
+    path('api-key/', views.ApiKeyDetailView.as_view(), name='api-key'),
+    path('gathering/', include('gathering.urls', namespace="api-gathering")),
+    # url(r'^users/', include('users.urls')),
 ]

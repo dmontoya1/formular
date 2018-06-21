@@ -1,0 +1,95 @@
+{% extends 'webclient/base.html' %}
+{% load static %}
+
+{% block extra_css%}
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css" >
+{% endblock %}
+
+{% block nav_buttons %}
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item ">
+            <a class="nav-link" href="{% url 'webclient:home' %}">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'webclient:start-gathering' %}">Toma de requerimientos</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'webclient:form-history' %}">Historial de Formularios</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+            <h3>Nuevo Formulario</h3>
+            <p>Desde aqui podrás comenzar una nueva toma de requerimientos </p>
+            <p><a class="btn btn-primary btn-lg" href="{% url 'webclient:gathering-form' %}" role="button">Ir al formulario &raquo;</a></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Example row of columns -->
+        <!-- <div class="row"> -->
+            <h1 class="display-3">Mis formularios</h1>
+            <hr>
+            <table class="table" id="form-table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Acciones</th>
+                        <!-- <th scope="col">Handle</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in object_list %}
+                        <tr>
+                            <th scope="row">{{form.id}}</th>
+                            <td>{{form.date}}</td>
+                            <td>Descargar</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        <!-- </div> -->
+
+        <hr>
+
+    </div> <!-- /container -->
+{% endblock %}
+
+{% block extra_js%}
+    <script src="//cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('.table').DataTable({
+                language: {
+                    "sProcessing":     "Procesando...",
+                    "sLengthMenu":     "Mostrar _MENU_ registros",
+                    "sZeroRecords":    "No se encontraron resultados",
+                    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix":    "",
+                    "sSearch":         "Buscar:",
+                    "sUrl":            "",
+                    "sInfoThousands":  ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst":    "Primero",
+                        "sLast":     "Último",
+                        "sNext":     "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+            });
+        } );
+    </script>
+{% endblock %}

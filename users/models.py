@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -67,3 +68,21 @@ class Company(models.Model):
     class Meta:
         verbose_name = "Companía"
         verbose_name_plural = "Compañías"
+
+
+class UserToken(models.Model):
+    """Modelo para guardar los token de los usuarios para hacer la
+    función de recuperar contraseña
+    """
+
+    password_activation_token = models.CharField(
+        "Token recuperar contraseña",
+        max_length=200,
+        blank=True,
+        null=True
+    )
+    is_use_token = models.BooleanField("Recuperó la contraseña?", default=False)
+    user = models.ForeignKey(
+        get_user_model(),
+        verbose_name='Usuario',
+        on_delete=models.CASCADE)

@@ -16,6 +16,14 @@
         <title>Formular!</title>
     </head>
     <body>
+        {% if messages  %}
+            {% for message in messages %}
+            <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{message}}
+            </div>
+            {% endfor %}
+        {% endif %}
 
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <a class="navbar-brand" href="{% url 'webclient:home' %}">FORMULAR</a>
@@ -27,7 +35,7 @@
                 {% block nav_buttons %}
                 {% endblock %}
                 {% if request.user.is_anonymous %}
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-login">
                         Iniciar Sesión
                     </button>
                 {% else %}
@@ -37,12 +45,12 @@
             </div>
         </nav>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Modal Login -->
+        <div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="modal-loginLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Iniciar Sesión</h5>
+                        <h5 class="modal-title" id="modal-loginLabel">Iniciar Sesión</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -58,11 +66,47 @@
                                 <label for="password">Contraseña</label>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña">
                             </div>
+
+                            <p class="text-right">
+                                <a href="#modal-forget" class="forgot-pass" data-toggle="modal" data-dismiss="modal">¿Olvidaste tu contraseña?</a>
+                            </p>
+                        
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Recuperar contraseña -->
+        <div class="modal fade" id="modal-forget" tabindex="-1" role="dialog" aria-labelledby="modal-recoverLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal-recoverLabel">¿Olvidaste tu contraseña?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" id="forget" class="form-horizontal">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="username">Correo Electrónico</label>
+                                <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Ingresa tu correo">
+                            </div>
+                            <p class="text-right">
+                                <a href="#modal-login" class="forgot-pass" data-toggle="modal" data-dismiss="modal">Iniciar Sesión</a>
+                            </p>
                         
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
                         </form>
                     </div>
                 </div>
@@ -135,6 +179,77 @@
                     }
                 });
             })         
+        </script>
+
+        <!-- Script para enviar Ajax de olvido contraseña -->
+        <script type="text/javascript">
+            $("#forget").on('submit', function(ev){
+                ev.preventDefault()
+                $('#reg_submit_forget').attr('disabled', true)
+                $.ajax({
+                    data: $(this).serialize(),
+                    type: "POST",
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                    url:"{% url 'api:users:reset_password' %}",
+                    success:function(data)
+                    {
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": true,
+                            "onclick": null,
+                            "showDuration": "1000",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                        toastr.success(data['detail'])
+                    },
+                    error:function(data)
+                    {
+                        data = data.responseJSON
+                        $.each(data, function(k, v)
+                        {   
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "positionClass": "toast-top-right",
+                                "preventDuplicates": true,
+                                "onclick": null,
+                                "showDuration": "1000",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            }
+                            toastr.error("El correo electrónico no se encuentra registrado")
+                            
+                        });
+                        $('#reg_submit_forget').attr('disabled', false)
+                    }
+                });
+            })          
+        </script>
+
+        <script type="text/javascript">
+            $('#modal-login').on('hide.bs.modal', function(e){
+                $('#login')[0].reset();
+            })
+            $('#modal-forget').on('hide.bs.modal', function(e){
+                $('#forget')[0].reset();
+            })
         </script>
 
         {% block extra_js%}

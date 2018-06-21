@@ -105,7 +105,7 @@ class AnswerCreate(APIView):
     def post(self, request):
         user = get_api_user(request)
         form = Form(
-            patient=user
+            user=user
         )
         form.save()
         if form is not None:
@@ -131,7 +131,7 @@ class AnswerCreate(APIView):
             response = {'detail': "Formulario creado correctamente"}
             stat = status.HTTP_201_CREATED
         else:
-            response = {'detail': "No se encuentra la empresa solicitada"}
+            response = {'detail': "Ocurrió un error inesperado"}
             stat = status.HTTP_400_BAD_REQUEST
 
         return Response(response, status=stat)

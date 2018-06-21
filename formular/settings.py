@@ -143,3 +143,11 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     )
 }
+
+#email configuration
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_USER = 'Formular <no-reply@formular.com>'
+EMAIL_HOST_USER = 'apptitud'
+EMAIL_HOST_PASSWORD = 'jkdsjk4534.sd!"'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

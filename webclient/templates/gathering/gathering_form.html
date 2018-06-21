@@ -34,7 +34,10 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'webclient:start-gathering' %}">Toma de requerimientos<span class="sr-only">(current)</span></a>
-                    </li>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'webclient:form-history' %}">Historial de Formularios</a>
+					</li>
                 </ul>
             </div>
         </nav>
@@ -370,7 +373,7 @@
 								title: 'Verificación exitosa',
 								text: data.risk
 							}).then((result) => {
-								window.location.replace("{% url 'webclient:home' %}");
+								window.location.replace("{% url 'webclient:form-history' %}");
 							})
 						}) 
 						.fail(function (xhr) {

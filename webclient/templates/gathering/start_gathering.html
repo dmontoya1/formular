@@ -9,6 +9,9 @@
         <li class="nav-item active">
             <a class="nav-link" href="{% url 'webclient:start-gathering' %}">Toma de requerimientos</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'webclient:form-history' %}">Historial de Formularios</a>
+        </li>
     </ul>
 {% endblock %}
 
@@ -17,7 +20,7 @@
     <div class="jumbotron">
         <div class="container">
             <h1 class="display-3">Comenzar Formulario</h1>
-            <p>Para comenzar un nuevo formulario primero debes seleccionar o crea una empresa</p>
+            <p>Desde aqui podrás comenzar una nueva toma de requerimientos</p>
             <p><a class="btn btn-primary btn-lg" href="{% url 'webclient:gathering-form' %}" role="button">Ir al formulario &raquo;</a></p>
         </div>
     </div>

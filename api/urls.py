@@ -7,5 +7,5 @@ urlpatterns = [
     path('', include('webclient.urls'), name='webclient'),
     path('api-key/', views.ApiKeyDetailView.as_view(), name='api-key'),
     path('gathering/', include('gathering.urls', namespace="api-gathering")),
-    # url(r'^users/', include('users.urls')),
+    path('users/', include('users.urls', namespace="api-users")),
 ]

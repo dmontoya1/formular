@@ -23,21 +23,23 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
         <div class="container">
-            <h3>Nuevo Formulario</h3>
+            <h2>Nuevo Formulario</h2>
             <p>Desde aqui podrás comenzar una nueva toma de requerimientos </p>
-            <p><a class="btn btn-primary btn-lg" href="{% url 'webclient:gathering-form' %}" role="button">Ir al formulario &raquo;</a></p>
+            <p><a class="btn btn-primary btn-lg" href="{% url 'webclient:select-company' %}" role="button">Ir al formulario &raquo;</a></p>
         </div>
     </div>
+    
 
     <div class="container">
         <!-- Example row of columns -->
         <!-- <div class="row"> -->
-            <h1 class="display-3">Mis formularios</h1>
+            <h1 class="display-4">Mis formularios</h1>
             <hr>
             <table class="table" id="form-table">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
+                        <th scope="col">Compañia</th>
                         <th scope="col">Fecha</th>
                         <th scope="col">Acciones</th>
                         <!-- <th scope="col">Handle</th> -->
@@ -47,6 +49,7 @@
                     {% for form in object_list %}
                         <tr>
                             <th scope="row">{{form.id}}</th>
+                            <td>{{form.company|default:"Sin compañia"}}</td>
                             <td>{{form.date}}</td>
                             <td>Descargar</td>
                         </tr>

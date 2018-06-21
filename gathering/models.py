@@ -87,7 +87,15 @@ class Form(models.Model):
         User,
         verbose_name="Usuario",
         related_name="related_users_forms",
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE
+    )
+    company = models.ForeignKey(
+        Company,
+        verbose_name="Compañia",
+        related_name="related_company_forms",
+        on_delete=models.CASCADE,
+        blank=True, null=True
+    )
 
     class Meta:
         verbose_name = "Formulario"

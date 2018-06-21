@@ -1,0 +1,262 @@
+{% extends 'webclient/base.html' %}
+{% load static %}
+
+{% block extra_css%}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block nav_buttons %}
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item ">
+            <a class="nav-link" href="{% url 'webclient:home' %}">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'webclient:start-gathering' %}">Toma de requerimientos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'webclient:form-history' %}">Historial de Formularios</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+            <h3>Seleccionar una empresa</h3>
+            <p>Para continuar debes seleccionar una empresa, o crear una si no la encuentras </p>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <hr>
+        <form method="POST" action="{% url 'webclient:gathering-form' %}" id="select_company_form" class="form-horizontal">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="select_company">Selecciona una empresa</label>
+                <select required class="form-control" name="company_id" id="select_company">
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Seleccionar</button>
+            <div class="float-right">
+                <a class="btn btn-primary text-white" data-toggle="modal" data-target="#modal-company">Crear Empresa</a>
+            </div>
+        </form>
+        
+        <br>
+        <hr>
+        
+
+    </div> <!-- /container -->
+
+    <!-- Modal Create Company -->
+    <div class="modal fade bd-example-modal-lg" id="modal-company" tabindex="-1" role="dialog" aria-labelledby="modal-company" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modal-loginLabel">Nueva Empresa</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="company-create" class="form-horizontal">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Nombre Empresa *</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Ingresa el nombre de la empresa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">NIT *</label>
+                            <input type="text" class="form-control" id="nit" name="nit" placeholder="Ingresa el NIT de la empresa " required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Email *</label>
+                            <input type="email" class="form-control" id="email-company" name="email" placeholder="Ingresa el email de la empresa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Número telefónico empresa *</label>
+                            <input type="text" class="form-control" id="phone-company" name="phone_number" placeholder="Ingresa el teléfono de la empresa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Dirección Empresa *</label>
+                            <input type="text" class="form-control" id="address-company" name="address" placeholder="Ingresa la dirección de la empresa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Nombre Persona de contacto *</label>
+                            <input type="text" class="form-control" id="person-name" name="contact_person_name" placeholder="Ingresa el nombre de la persona a cargo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Email Persona de contacto *</label>
+                            <input type="email" class="form-control" id="person-email" name="contact_person_email" placeholder="Ingresa el email de la persona a cargo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Cargo persona de contacto *</label>
+                            <input type="text" class="form-control" id="person-charge" name="contact_person_charge" placeholder="Ingresa el cargo de la persona a cargo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Número teléfono Persona de contacto *</label>
+                            <input type="text" class="form-control" id="person-phone" name="contact_person_phone" placeholder="Ingresa el teléfono de la persona a cargo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Website Empresa</label>
+                            <input type="text" class="form-control" id="website-company" name="website" placeholder="Ingresa la página web de la empresa (opcional)">
+                        </div>
+                        <p class="text-right">
+                            <span>Todos los campos con * son requeridos</span>
+                        </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js%}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script>
+        function LoadCompanies(){
+            $.ajax(
+            {
+                type: 'GET',
+                headers: {'Api-Key': '{{ Api_Key}}'},
+                url:"{% url 'api:users:company' %}",
+                success:function(data)
+                {
+                    $('#select_company').empty()
+                    $(data).each(function(i, v){
+                        $('#select_company').append(
+                            `<option value="${v.id}">${v.name} (${v.nit})</option>`
+                        )
+                    })
+                    $('#select_company').prepend(
+                        `<option selected disabled value='null'>Seleccione una empresa</option>`
+                    )
+                    
+                },
+                error:function(data)
+                {
+                    data = data.responseJSON
+                    $.each(data, function(k, v)
+                    {
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": true,
+                            "onclick": null,
+                            "showDuration": "1000",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                        toastr.error(v)
+                    });
+                    submitButton.removeClass('disabled')
+                    submitButton.attr('disabled', false)
+                }
+            });
+        }
+        
+        $('#company-create').on('submit', function(e){
+            e.preventDefault()
+            $.ajax(
+            {
+                type: 'POST',
+                headers: ({'X-CSRFToken': '{{csrftoken}}'},
+                         {'Api-Key': '{{ Api_Key}}'}),
+                url:"{% url 'api:users:company'  %}",
+                data: $(this).serialize(),
+                success:function(data)
+                {
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": true,
+                        "onclick": null,
+                        "showDuration": "1000",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr.success("Se ha agregado la empresa exitosamente")
+                    setTimeout(function(){
+                        $('#modal-company').modal('toggle')
+                        location.reload()
+                    }, 1500);
+                    
+                },
+                error:function(data)
+                {
+                    data = data.responseJSON
+                    $.each(data, function(k, v)
+                    {
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": true,
+                            "onclick": null,
+                            "showDuration": "1000",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                        toastr.error(v)
+                    });
+                }
+            });
+        })
+        
+        $(document).ready(function(){
+            $.ajaxSetup({ 
+                beforeSend: function(xhr, settings) {
+                    function getCookie(name) {
+                        var cookieValue = null;
+                        if (document.cookie && document.cookie != '') {
+                            var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var cookie = jQuery.trim(cookies[i]);
+                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    }
+                } 
+            });
+            LoadCompanies()
+            $('#select_company').select2()
+        });
+    </script>
+{% endblock %}

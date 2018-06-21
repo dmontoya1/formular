@@ -16,8 +16,8 @@ from django.core.mail import EmailMessage
 from django.template import loader
 from django.shortcuts import render, get_object_or_404, reverse
 
-from .models import UserToken
-from .serializers import UserSerializer
+from .models import UserToken, Company
+from .serializers import UserSerializer, CompanySerializer
 
 
 class PasswordResetView(APIView):
@@ -60,3 +60,11 @@ class PasswordResetView(APIView):
             },
             status=status.HTTP_200_OK
 		)
+
+
+class CompaniesListCreate(generics.ListCreateAPIView):
+    """Api para listar las compañias registradas
+    """
+
+    serializer_class = CompanySerializer
+    queryset = Company.objects.all()

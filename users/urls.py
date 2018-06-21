@@ -8,4 +8,5 @@ from . import views
 app_name = 'users'
 urlpatterns = [
 	path('reset-password/', views.PasswordResetView.as_view(), name='reset_password'),
+	path('companies/', views.CompaniesListCreate.as_view(), name='company'),
 ]

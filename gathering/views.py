@@ -104,29 +104,36 @@ class AnswerCreate(APIView):
 
     def post(self, request):
         user = get_api_user(request)
-        form = Form(
-            user=user
-        )
-        form.save()
+        print (request.data)
+        for answer in request.data:
+            if answer['question'] == 'company_id':
+                company = Company.objects.get(id=answer['value'])
+                form = Form(
+                    user=user,
+                    company=company
+                )
+                form.save()
+            
         if form is not None:
             for answer in request.data:
-                question = Question.objects.get(pk=answer['question'])
-                if question.question_type != Question.SELECCION:
-                    instance = Answer(
-                        form=form,
-                        question=question,
-                        value=answer['value']
-                    )
-                    instance.save()
-                else:
-                    choice = QuestionChoice.objects.get(pk=answer['value'])
-                    instance = Answer(
-                        form=form,
-                        question=question,
-                        value=str(choice.value),
-                        choice=answer['value']
-                    )
-                    instance.save()
+                if answer['question'] != 'company_id':
+                    question = Question.objects.get(pk=answer['question'])
+                    if question.question_type != Question.SELECCION:
+                        instance = Answer(
+                            form=form,
+                            question=question,
+                            value=answer['value']
+                        )
+                        instance.save()
+                    else:
+                        choice = QuestionChoice.objects.get(pk=answer['value'])
+                        instance = Answer(
+                            form=form,
+                            question=question,
+                            value=str(choice.value),
+                            choice=answer['value']
+                        )
+                        instance.save()
 
             response = {'detail': "Formulario creado correctamente"}
             stat = status.HTTP_201_CREATED

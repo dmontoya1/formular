@@ -1,23 +1,31 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from rest_framework.authentication import BasicAuthentication 
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import TemplateView, View, ListView
 
+from api.helpers import CsrfExemptSessionAuthentication
 from gathering.models import Form
-from users.models import UserToken
+from users.models import UserToken, Company
 
 
 class HomePageView(TemplateView):
+    """ Index de la plataforma
+    """
+
     template_name = 'home/home.html'
 
 
 class StartGathering(LoginRequiredMixin, TemplateView):
+    """Vista antes de comenzar el formulario
+    """
 
     template_name = 'gathering/start_gathering.html'
     login_url = '/'
@@ -25,8 +33,29 @@ class StartGathering(LoginRequiredMixin, TemplateView):
 
 
 class GatheringForm(LoginRequiredMixin, TemplateView):
+    """ Vista del Formulario
+    """
 
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
     template_name = 'gathering/gathering_form.html'
+    login_url = '/'
+    redirect_field_name = 'next'
+
+    def post(self, request, *args, **kwargs):
+        print (request.POST)
+        company_id = request.POST['company_id']
+        context = {
+            'company': company_id
+        }
+        return render(request, 'gathering/gathering_form.html', context)
+
+
+class SelectCompany(LoginRequiredMixin, TemplateView):
+    """Vista para seleccionar la empresa a la cual se le hará 
+    la toma de requerimientos
+    """
+
+    template_name = 'gathering/select_company.html'
     login_url = '/'
     redirect_field_name = 'next'
 
@@ -87,6 +116,7 @@ class ResetPasswordView(TemplateView):
             try:
                 user = UserToken.objects.get(is_use_token=False, password_activation_token=token)
             except UserToken.DoesNotExist:
+                print ("No existe")
                 messages.add_message(
                     request,
                     messages.ERROR, 

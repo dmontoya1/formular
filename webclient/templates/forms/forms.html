@@ -1,37 +1,61 @@
-<style>
-    @page {
-        size: letter landscape;
-        margin: 2cm;
-    }
-    table {
-        width: 100%;
-        text-align: center;
-    }
-    table, th, td {
-        border: 1px solid #161616;
-    }
-    td {
-        padding: 3px;
-    }
-</style>
-<h2>Lista de requerimientos para la empresa <strong>{{company}}</strong></h2>
-<table>
-    <thead>
-        <tr>
-            {% for h in headers %}
-                <td>
-                    <strong>{{h}}</strong>
-                </td>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for answer in answers %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        @page {
+            size: letter landscape;
+            margin: 2cm;
+        }
+        table {
+            width: 100%;
+            text-align: center;
+        }
+        table, th, td {
+            border: 1px solid #161616;
+        }
+        td {
+            padding: 3px;
+        }
+    </style>
+    <h2>Lista de requerimientos para la empresa <strong>{{company}}</strong></h2>
+    <span>Fecha: {{date}}</span>
+    
+    <table>
+        <thead>
             <tr>
-                <td>{{customer.email|default:_('Sin Email')}}</td>
-                <td>{{customer.first_name}}</td>
+                {% for h in headers %}
+                    <td>
+                        <strong>{{h}}</strong>
+                    </td>
+                {% endfor %}
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for answer in answers %}
+                <tr>
+                    <td>{{answer.question}}</td>
+                    <td>
+                        {% if answer.question.question_type == 'BO' %}
+                            {% if answer.value == 'on' %}
+                                &#10004;
+                            {% else %}
+                                &#10006;
+                            {% endif %}
+                        {% else %}
+                            {{answer.value}}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</body>
+</html>
     

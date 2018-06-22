@@ -14,4 +14,5 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page="/"), name='logout'),
     path('recover-password/', views.ResetPasswordView.as_view(), name='recover_password'),
+    path('export/<int:form_id>/pdf/', views.export_form_pdf, name='export_form_pdf'),
 ]

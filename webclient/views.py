@@ -165,17 +165,18 @@ class FormHistory(LoginRequiredMixin, ListView):
         return self.render_to_response(context)
 
 
-def export_customers_pdf(request):
-    form = request.data
+def export_form_pdf(request, form_id=None):
+    form = Form.objects.get(pk=form_id)
     context = {
         'headers': (
             'Pregunta',
             'Respuesta',
         ),
-        'answer': Answer.objects.filter(form=request.user.staff_profile.company),
-        'company': request.user.staff_profile.company.name
+        'answers': Answer.objects.filter(form=form).order_by('question__weight'),
+        'company': form.company,
+        'date': form.date
     }
-    report_template_name = 'reports/customers.html'
+    report_template_name = 'forms/forms.html'
 	
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="customers.pdf"'

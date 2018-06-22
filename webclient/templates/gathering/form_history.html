@@ -39,7 +39,6 @@
             <table class="table" id="form-table">
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
                         <th scope="col">Compañia</th>
                         <th scope="col">Fecha</th>
                         <th scope="col">Acciones</th>
@@ -49,12 +48,11 @@
                 <tbody>
                     {% for form in object_list %}
                         <tr>
-                            <th scope="row">{{form.id}}</th>
                             <td>{{form.company|default:"Sin compañia"}}</td>
                             <td>{{form.date}}</td>
                             <td>
                                 <button class="btn btn-success btn-detail" data-form-id={{form.id}}>Detalle</button> 
-                                <a href="#" class="btn btn-success btn-primary" >Descargar</button></td>
+                                <a href="/export/{{form.id}}/pdf/" class="btn btn-primary">Descargar</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -87,9 +85,9 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer download">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary">Descargar</button>
+                    <a href="/export/{{form.id}}/pdf/" class="btn btn-primary">Descargar</a>
                 </div>
             </div>
         </div>
@@ -120,6 +118,11 @@
                             `<tr><td>${v.question.context}</td><td>${icon}</td></tr>`
                         )
                     })
+                    $('.modal-footer').empty()
+                    $('.modal-footer').append(
+                        `<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>`+
+                        `<a href="/export/${form_id}/pdf/" class="btn btn-primary">Descargar</a>`
+                    )
                     
                 },
                 error:function(data)

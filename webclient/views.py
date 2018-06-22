@@ -179,6 +179,6 @@ def export_form_pdf(request, form_id=None):
     report_template_name = 'forms/forms.html'
 	
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="customers.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="form.pdf"'
     result = generate_pdf(report_template_name, file_object=response, context=context)
     return response

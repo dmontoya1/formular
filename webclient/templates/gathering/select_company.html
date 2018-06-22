@@ -35,7 +35,9 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="select_company">Selecciona una empresa</label>
-                <select required class="form-control" name="company_id" id="select_company">
+                <select class="form-control" name="company_id" id="select_company"
+                        data-validation="required"
+                        data-validation-error-msg="Debes seleccionar una empresa">
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Seleccionar</button>
@@ -136,7 +138,7 @@
                         )
                     })
                     $('#select_company').prepend(
-                        `<option selected disabled value='null'>Seleccione una empresa</option>`
+                        `<option selected disabled value=''>Seleccione una empresa</option>`
                     )
                     
                 },
@@ -176,7 +178,7 @@
             {
                 type: 'POST',
                 headers: ({'X-CSRFToken': '{{csrftoken}}'},
-                         {'Api-Key': '{{ Api_Key}}'}),
+                        {'Api-Key': '{{ Api_Key}}'}),
                 url:"{% url 'api:users:company'  %}",
                 data: $(this).serialize(),
                 success:function(data)
@@ -231,6 +233,7 @@
                     });
                 }
             });
+            
         })
         
         $(document).ready(function(){

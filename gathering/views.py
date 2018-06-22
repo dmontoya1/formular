@@ -104,7 +104,6 @@ class AnswerCreate(APIView):
 
     def post(self, request):
         user = get_api_user(request)
-        print (request.data)
         for answer in request.data:
             if answer['question'] == 'company_id':
                 company = Company.objects.get(id=answer['value'])
@@ -113,8 +112,10 @@ class AnswerCreate(APIView):
                     company=company
                 )
                 form.save()
-            
+        
+        answer_questions = []
         if form is not None:
+            questions = Question.objects.all()
             for answer in request.data:
                 if answer['question'] != 'company_id':
                     question = Question.objects.get(pk=answer['question'])
@@ -125,6 +126,15 @@ class AnswerCreate(APIView):
                             value=answer['value']
                         )
                         instance.save()
+                        answer_questions.append(instance.question)
+                    elif question.question_type == Question.BOOLEANO:
+                        instance = Answer(
+                            form=form,
+                            question=question,
+                            value=True,
+                        )
+                        instance.save()
+                        answer_questions.append(instance.question)
                     else:
                         choice = QuestionChoice.objects.get(pk=answer['value'])
                         instance = Answer(
@@ -134,6 +144,19 @@ class AnswerCreate(APIView):
                             choice=answer['value']
                         )
                         instance.save()
+                        answer_questions.append(instance.question)
+            
+            questions = Question.objects.all()
+            no_answers = []
+            [no_answers.append(x) for x in questions if x not in answer_questions]
+
+            for a in no_answers:
+                instance = Answer(
+                    form=form,
+                    question=a,
+                    value='off'
+                )
+                instance.save()
 
             response = {'detail': "Formulario creado correctamente"}
             stat = status.HTTP_201_CREATED
@@ -142,3 +165,17 @@ class AnswerCreate(APIView):
             stat = status.HTTP_400_BAD_REQUEST
 
         return Response(response, status=stat)
+
+
+class AnswersFormDetail(generics.ListAPIView):
+    """Api para listar las respuestas de un formulario
+    """
+
+    serializer_class = AnswerSerializer
+
+    def get_queryset(self):
+        queryset = Answer.objects.all()
+        form_id = self.kwargs['form_id']
+        if form_id:
+            queryset = queryset.filter(form=form_id).order_by('question__weight')
+        return queryset

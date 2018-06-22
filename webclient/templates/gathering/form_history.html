@@ -3,6 +3,7 @@
 
 {% block extra_css%}
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css" >
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 {% endblock %}
 
 {% block nav_buttons %}
@@ -51,7 +52,9 @@
                             <th scope="row">{{form.id}}</th>
                             <td>{{form.company|default:"Sin compañia"}}</td>
                             <td>{{form.date}}</td>
-                            <td>Descargar</td>
+                            <td>
+                                <button class="btn btn-success btn-detail" data-form-id={{form.id}}>Detalle</button> 
+                                <a href="#" class="btn btn-success btn-primary" >Descargar</button></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -61,13 +64,97 @@
         <hr>
 
     </div> <!-- /container -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="form-detail" tabindex="-1" role="dialog" aria-labelledby="form-detail" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" >Detalle del formulario</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table" id="detail-form">
+                        <thead>
+                            <tr>
+                                <th scope="col">Pregunta</th>
+                                <th scope="col">Respuesta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Descargar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block extra_js%}
     <script src="//cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
     <script>
+        $('.btn-detail').on('click', function(){
+            form_id = $(this).data('form-id')
+            $.ajax(
+            {
+                type: 'GET',
+                headers: {'Api-Key': '{{ Api_Key}}'},
+                url:"/api/gathering/form/"+form_id+"/detail",
+                success:function(data)
+                {
+                    $('#detail-form tbody').empty()
+                    $(data).each(function(k, v){
+                        if (v.value == 'on'){
+                            icon = '<i class="fas fa-check"></i>'
+                        }
+                        else{
+                            icon = '<i class="fas fa-times"></i>'
+                        }
+                        $('#detail-form tbody').append(
+                            `<tr><td>${v.question.context}</td><td>${icon}</td></tr>`
+                        )
+                    })
+                    
+                },
+                error:function(data)
+                {
+                    data = data.responseJSON
+                    $.each(data, function(k, v)
+                    {
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": true,
+                            "onclick": null,
+                            "showDuration": "1000",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                        toastr.error(v)
+                    });
+                    submitButton.removeClass('disabled')
+                    submitButton.attr('disabled', false)
+                }
+            });
+   
+            $('#form-detail').modal('toggle')
+        })
         $(document).ready( function () {
-            $('.table').DataTable({
+            $('#form-table').DataTable({
                 language: {
                     "sProcessing":     "Procesando...",
                     "sLengthMenu":     "Mostrar _MENU_ registros",

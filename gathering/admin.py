@@ -99,7 +99,7 @@ class FormAdmin(admin.ModelAdmin):
         'date', 'user__first_name', 'user__last_name',
     )
     list_display = (
-        'date', 'user',
+        'date', 'user', 'company',
     )
 
 

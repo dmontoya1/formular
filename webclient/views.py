@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django_xhtml2pdf.utils import generate_pdf
+
 from rest_framework.authentication import BasicAuthentication 
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import TemplateView, View, ListView
 
 from api.helpers import CsrfExemptSessionAuthentication
-from gathering.models import Form
+from gathering.models import Form, Answer
 from users.models import UserToken, Company
 
 
@@ -42,7 +44,6 @@ class GatheringForm(LoginRequiredMixin, TemplateView):
     redirect_field_name = 'next'
 
     def post(self, request, *args, **kwargs):
-        print (request.POST)
         company_id = request.POST['company_id']
         context = {
             'company': company_id
@@ -116,7 +117,6 @@ class ResetPasswordView(TemplateView):
             try:
                 user = UserToken.objects.get(is_use_token=False, password_activation_token=token)
             except UserToken.DoesNotExist:
-                print ("No existe")
                 messages.add_message(
                     request,
                     messages.ERROR, 
@@ -158,8 +158,26 @@ class FormHistory(LoginRequiredMixin, ListView):
             user = request.user
             forms = Form.objects.filter(user=user)
             if not forms:
-                redirect_url = 'webclient:start-consult'
+                redirect_url = 'webclient:start-gathering'
                 return redirect(reverse(redirect_url))
         self.object_list = self.get_queryset()
         context = self.get_context_data(**kwargs)
         return self.render_to_response(context)
+
+
+def export_customers_pdf(request):
+    form = request.data
+    context = {
+        'headers': (
+            'Pregunta',
+            'Respuesta',
+        ),
+        'answer': Answer.objects.filter(form=request.user.staff_profile.company),
+        'company': request.user.staff_profile.company.name
+    }
+    report_template_name = 'reports/customers.html'
+	
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="customers.pdf"'
+    result = generate_pdf(report_template_name, file_object=response, context=context)
+    return response

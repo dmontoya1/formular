@@ -66,7 +66,8 @@ class AnswerSerializer(serializers.ModelSerializer):
     """Serializador para las respuestas de un formulario
     """
 
-    form = serializers.PrimaryKeyRelatedField(required=False, read_only=True)
+    form = FormSerializer(many=False, read_only=True)
+    question = QuestionSerializer(many=False, read_only=False)
 
     class Meta:
         model = Answer

@@ -11,4 +11,5 @@ urlpatterns = [
     path('question/<int:question_id>/', views.QuestionDetail.as_view(), name='question-detail'),
     path('forms/<int:company_id>/', views.FormList.as_view(), name='form-list'),
     path('answer/', views.AnswerCreate.as_view(), name='answer-create'),
+    path('form/<int:form_id>/detail', views.AnswersFormDetail.as_view(), name='form-detail'),
 ]

@@ -207,15 +207,15 @@
 									required: true,
 									type: 'checkbox',
 									id: 'check_' + elementId,
-									class: 'form-validate',
+									class: 'form-validate check',
                                     name: elementId,
                                 });
 						}
 					}
 
-					function createElementLabel(title, elementId){
+					function createElementLabel(title, elementId, customClss){
 						label = $('<label/>').attr({
-							class: 'fs-field-label fs-anim-upper',
+							class: 'fs-field-label fs-anim-upper ' + customClss,
 							for: elementId
 						}); 
 						label.html(title)
@@ -246,7 +246,14 @@
 								});
 
 								input = createElement(element.question_type, element.id);
-								label =	createElementLabel(element.context, element.id);
+
+								customClss = ''
+
+								if(input.hasClass('check')){
+									customClss = 'check-label'
+								} 
+
+								label =	createElementLabel(element.context, element.id, customClss);
 
 								container.append(label, input);
 								

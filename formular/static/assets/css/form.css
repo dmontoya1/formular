@@ -234,6 +234,10 @@ a:hover, a:focus {
 	float: left;
 }
 
+.fs-fields .fs-field-label.fs-anim-upper.check-label {
+	margin-left: 1em;
+	margin-top: -5px;
+}
 /* Related demos */
 .related {
 	font-weight: 700;

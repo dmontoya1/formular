@@ -176,7 +176,7 @@ def export_form_pdf(request, form_id=None):
             'Pregunta',
             'Respuesta',
         ),
-        'answers': Answer.objects.filter(form=form).order_by('question__weight'),
+        'answers': Answer.objects.filter(form=form).order_by('question__category__name'),
         'company': form.company,
         'date': form.date
     }
@@ -199,7 +199,7 @@ def send_form_email(request, form_id=None):
             'Pregunta',
             'Respuesta',
         ),
-        'answers': Answer.objects.filter(form=form).order_by('question__category'),
+        'answers': Answer.objects.filter(form=form).order_by('question__category__name'),
         'company': form.company,
         'date': form.date
     }

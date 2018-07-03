@@ -1,21 +1,8 @@
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '^(^x315r4mhdl3_^^$&-by(v(zf_574m1vp$-iihau-tyxs9lv'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
-API_KEY = '2bfcecdc77142e37fd1bb6b023507518a29397b4'
 
 
 # Application definition
@@ -61,7 +48,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'formular/templates')
+            os.path.join(BASE_DIR, 'templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -77,19 +64,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'formular.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'formular',
-    }
-}
-
-SITE_ID = 1
 
 
 # Password validation
@@ -129,10 +103,10 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "formular/static"),
+    os.path.join(BASE_DIR, "static"),
 ]
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'formular/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # DRF Config
 REST_FRAMEWORK = {

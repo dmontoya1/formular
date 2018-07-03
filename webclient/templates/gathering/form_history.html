@@ -52,7 +52,8 @@
                             <td>{{form.date}}</td>
                             <td>
                                 <button class="btn btn-success btn-detail" data-form-id={{form.id}}>Detalle</button> 
-                                <a href="/export/{{form.id}}/pdf/" class="btn btn-primary">Descargar</a></td>
+                                <a href="/export/{{form.id}}/pdf/" class="btn btn-primary">Descargar</a>
+                                <a href="/send_email/{{form.id}}/" class="btn btn-info">Enviar correo</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

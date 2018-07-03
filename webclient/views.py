@@ -8,8 +8,10 @@ from rest_framework.authentication import BasicAuthentication
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import EmailMessage
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.template import loader
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import TemplateView, View, ListView
 
@@ -166,6 +168,8 @@ class FormHistory(LoginRequiredMixin, ListView):
 
 
 def export_form_pdf(request, form_id=None):
+    """Función para descargar el formulario en pdf
+    """
     form = Form.objects.get(pk=form_id)
     context = {
         'headers': (
@@ -182,3 +186,32 @@ def export_form_pdf(request, form_id=None):
     response['Content-Disposition'] = 'attachment; filename="form.pdf"'
     result = generate_pdf(report_template_name, file_object=response, context=context)
     return response
+
+
+def send_form_email(request, form_id=None):
+    """Función para enviar un email con el formulario
+    """
+
+    form = Form.objects.get(pk=form_id)
+    context = {
+        'headers': (
+            'Pregunta',
+            'Respuesta',
+        ),
+        'answers': Answer.objects.filter(form=form).order_by('question__weight'),
+        'company': form.company,
+        'date': form.date
+    }
+    template = 'emails/form-email.html'
+    body = loader.get_template(template).render(context)
+    message = EmailMessage("Detalle de Formulario", body, "no-reply@formular.com", ["dmontoya@apptitud.com.co"])
+    message.content_subtype = 'html'
+    message.send()
+
+    messages.add_message(
+        request,
+        messages.ERROR, 
+        "Correo enviado correctamente!"
+    )
+
+    return HttpResponseRedirect(reverse('webclient:form-history'))	

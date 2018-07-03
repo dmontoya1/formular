@@ -378,7 +378,7 @@
 						.done(function(data){
 							swal({
 								type: 'success',
-								title: 'Verificación exitosa',
+								title: 'Formulario grabado exitosamente',
 								text: data.risk
 							}).then((result) => {
 								window.location.replace("{% url 'webclient:form-history' %}");
@@ -387,8 +387,8 @@
 						.fail(function (xhr) {
 							swal({
 								type: 'info',
-								title: 'Verificación no exitosa',
-								text: 'Ocurrió un error al intentar obtener el resultado. Código de respuesta: ' + xhr.status
+								title: 'Ha ocurrido un problema al guardar tu formulario',
+								text: 'Ocurrió un error al intentar guardar el formulario. Código de respuesta: ' + xhr.status
 							});
 						})
 				});

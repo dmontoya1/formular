@@ -177,5 +177,5 @@ class AnswersFormDetail(generics.ListAPIView):
         queryset = Answer.objects.all()
         form_id = self.kwargs['form_id']
         if form_id:
-            queryset = queryset.filter(form=form_id).order_by('question__name')
+            queryset = queryset.filter(form=form_id).order_by('question__category__name')
         return queryset

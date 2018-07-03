@@ -5,6 +5,7 @@ from django_xhtml2pdf.utils import generate_pdf
 
 from rest_framework.authentication import BasicAuthentication 
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -206,7 +207,7 @@ def send_form_email(request, form_id=None):
     }
     template = 'emails/form-email.html'
     body = loader.get_template(template).render(context)
-    message = EmailMessage("Detalle de Formulario", body, "no-reply@formular.com", ["dmontoya@apptitud.com.co"])
+    message = EmailMessage("Detalle de Formulario", body, "no-reply@formular.com", [settings.EMAIL_USER])
     message.content_subtype = 'html'
     message.send()
 

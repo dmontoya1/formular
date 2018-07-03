@@ -14,3 +14,5 @@ DATABASES = {
 }
 
 SITE_ID = 1
+
+EMAIL_USER = "dmontoya@apptitud.com.co"

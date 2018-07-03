@@ -195,10 +195,11 @@ def send_form_email(request, form_id=None):
     form = Form.objects.get(pk=form_id)
     context = {
         'headers': (
+            'Categoría',
             'Pregunta',
             'Respuesta',
         ),
-        'answers': Answer.objects.filter(form=form).order_by('question__weight'),
+        'answers': Answer.objects.filter(form=form).order_by('question__category'),
         'company': form.company,
         'date': form.date
     }

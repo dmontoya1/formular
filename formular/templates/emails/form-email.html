@@ -173,6 +173,7 @@
                                 <tbody>
                                     {% for answer in answers %}
                                     <tr>
+                                        <td>{{answer.question.category.name}}</td>
                                         <td>{{answer.question}}</td>
                                         <td>
                                             {% if answer.question.question_type == 'BO' %}

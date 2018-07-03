@@ -199,7 +199,8 @@ def send_form_email(request, form_id=None):
             'Pregunta',
             'Respuesta',
         ),
-        'answers': Answer.objects.filter(form=form).order_by('question__category__name'),
+        'answers': Answer.objects.filter(form=form).exclude(question__question_type='TA').order_by('question__category__name'),
+        'answers_ta': Answer.objects.filter(form=form, question__question_type='TA').order_by('question__category__name'),
         'company': form.company,
         'date': form.date
     }

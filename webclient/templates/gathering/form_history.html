@@ -110,17 +110,22 @@
                 {
                     $('#detail-form tbody').empty()
                     $(data).each(function(k, v){
-                        if (v.value == 'on'){
-                            icon = '<i class="fas fa-check"></i>'
+                        if (v.question.question_type == 'BO'){
+                            if (v.value == 'on'){
+                                value = '<i class="fas fa-check"></i>'
+                            }
+                            else{
+                                value = '<i class="fas fa-times"></i>'
+                            }
                         }
-                        else{
-                            icon = '<i class="fas fa-times"></i>'
+                        else {
+                            value = v.value
                         }
                         $('#detail-form tbody').append(
                             `<tr>
                                 <td>${v.question.category.name}</td>
                                 <td>${v.question.context}</td>
-                                <td>${icon}</td>
+                                <td>${value}</td>
                             </tr>`
                         )
                     })

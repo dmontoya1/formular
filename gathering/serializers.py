@@ -20,6 +20,8 @@ class QuestionSerializer(serializers.ModelSerializer):
     """Serializador para las preguntas
     """
 
+    category = CategorySerializer(many=False, read_only=False)
+
     class Meta:
         model = Question
         fields = ('id', 'category', 'context', 'question_type', 'weight',)

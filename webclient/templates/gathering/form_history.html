@@ -78,6 +78,7 @@
                     <table class="table" id="detail-form">
                         <thead>
                             <tr>
+                                <th scope="col">Categoría</th>
                                 <th scope="col">Pregunta</th>
                                 <th scope="col">Respuesta</th>
                             </tr>
@@ -116,7 +117,11 @@
                             icon = '<i class="fas fa-times"></i>'
                         }
                         $('#detail-form tbody').append(
-                            `<tr><td>${v.question.context}</td><td>${icon}</td></tr>`
+                            `<tr>
+                                <td>${v.question.category.name}</td>
+                                <td>${v.question.context}</td>
+                                <td>${icon}</td>
+                            </tr>`
                         )
                     })
                     $('.modal-footer').empty()

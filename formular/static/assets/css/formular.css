@@ -110,6 +110,13 @@ nav.navbar {
     border-color: #fff;
 }
 
+@media screen and (max-width: 768px){
+	.btn-sized {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
 #Logout{
     font-weight: 700;
 }
@@ -134,4 +141,14 @@ nav.navbar {
 
 .title-2 {
     font-weight: 200
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #29a6dd !important;
+    color: #2e363e !important;
+}
+
+.select2-results__option[aria-selected] {
+    cursor: pointer;
+    color: #2e363e !important;
 }

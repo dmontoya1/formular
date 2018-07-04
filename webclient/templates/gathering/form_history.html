@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css%}
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css" >
+    <link rel="stylesheet" href="{% static '/assets/css/datatables.css' %}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 {% endblock %}
 
@@ -24,9 +24,9 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
         <div class="container">
-            <h2>Nuevo Formulario</h2>
+            <h1 class="title-1">Nuevo Formulario</h1>
             <p>Desde aqui podrás comenzar una nueva toma de requerimientos </p>
-            <p><a class="btn btn-primary btn-lg" href="{% url 'webclient:select-company' %}" role="button">Ir al formulario &raquo;</a></p>
+            <p><a class="btn btn-flat btn-lg" href="{% url 'webclient:select-company' %}" role="button">Ir al formulario &raquo;</a></p>
         </div>
     </div>
     
@@ -34,9 +34,9 @@
     <div class="container">
         <!-- Example row of columns -->
         <!-- <div class="row"> -->
-            <h1 class="display-4">Mis formularios</h1>
+            <h1>Mis formularios</h1>
             <hr>
-            <table class="table" id="form-table">
+            <table class="table table-dark" id="form-table">
                 <thead>
                     <tr>
                         <th scope="col">Compañia</th>
@@ -51,9 +51,9 @@
                             <td>{{form.company|default:"Sin compañia"}}</td>
                             <td>{{form.date}}</td>
                             <td>
-                                <button class="btn btn-success btn-detail" data-form-id={{form.id}}>Detalle</button> 
-                                <a href="/export/{{form.id}}/pdf/" class="btn btn-primary">Descargar</a>
-                                <a href="/send_email/{{form.id}}/" class="btn btn-info">Enviar correo</a></td>
+                                <button class="btn btn-wrapper-white" data-form-id={{form.id}}>Detalle</button> 
+                                <a href="/export/{{form.id}}/pdf/" class="btn btn-wrapper-white">Descargar</a>
+                                <a href="/send_email/{{form.id}}/" class="btn btn-flat">Enviar correo</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -71,7 +71,7 @@
                 <div class="modal-header">
                     <h2 class="modal-title" >Detalle del formulario</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span class="text-white" aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -89,7 +89,7 @@
                 </div>
                 <div class="modal-footer download">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <a href="/export/{{form.id}}/pdf/" class="btn btn-primary">Descargar</a>
+                    <a href="/export/{{form.id}}/pdf/" class="btn btn-flat">Descargar</a>
                 </div>
             </div>
         </div>
@@ -132,7 +132,7 @@
                     $('.modal-footer').empty()
                     $('.modal-footer').append(
                         `<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>`+
-                        `<a href="/export/${form_id}/pdf/" class="btn btn-primary">Descargar</a>`
+                        `<a href="/export/${form_id}/pdf/" class="btn btn-flat">Descargar</a>`
                     )
                     
                 },

@@ -10,22 +10,8 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" >
-        <style>
-
-            .container {
-                margin-top: 20px;
-            }
-
-            .form-error{
-                color: #dc3545;
-                font-size: 0.9em;
-            }
-
-            .alert-danger {
-                margin-top: 60px;
-                margin-bottom: -50px;
-            }
-        </style>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'assets/css/formular.css' %}">
 
         {% block extra_css%}
         {% endblock %}
@@ -33,9 +19,10 @@
         <title>Formular!</title>
     </head>
     <body>
-
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand" href="{% url 'webclient:home' %}">FORMULAR</a>
+        <nav class="navbar navbar-dark">
+            <a class="navbar-brand" href="/">
+                <img src="{% static '/assets/images/logo.png' %}" width="90" height="80" alt="uvemedia-logo">
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -44,12 +31,13 @@
                 {% block nav_buttons %}
                 {% endblock %}
                 {% if request.user.is_anonymous %}
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-login">
+                    <button type="button" class="btn btn-flat" data-toggle="modal" data-target="#modal-login">
                         Iniciar Sesión
                     </button>
                 {% else %}
+                    <br>
                     <span class="text-white">Bienvenido, {{ request.user.get_full_name }}</span>
-                    <a href="/logout/" id="Logout" class="btn btn-default">Cerrar sesión</a>
+                    <a href="/logout/" id="Logout" class="btn btn-semiflat">Cerrar sesión</a>
                 {% endif %}
             </div>
         </nav>
@@ -61,9 +49,6 @@
                 <div class="alert alert-danger">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     {{message}}
-                    <script>
-                        console.log("Mensaje")
-                    </script>
                 </div>
                 {% endfor %}
             {% endif %}
@@ -78,7 +63,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="modal-loginLabel">Iniciar Sesión</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span class="text-white" aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -101,7 +86,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                        <button type="submit" class="btn btn-flat">Iniciar Sesión</button>
                         </form>
                     </div>
                 </div>
@@ -115,7 +100,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="modal-recoverLabel">¿Olvidaste tu contraseña?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span class="text-white" aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -132,15 +117,17 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Enviar</button>
+                        <button type="submit" class="btn btn-flat">Enviar</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    
-        <footer class="container">
-            <p>&copy; Company 2017-2018</p>
+
+        <footer class="footer">
+            <div class="container">
+              <span>UVEMEDIA {% now "Y" %} - Powered by Apptitud</span>
+            </div>
         </footer>
     
 

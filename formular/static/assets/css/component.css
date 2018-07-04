@@ -236,6 +236,23 @@ button.fs-continue,
 }
 
 /* Inputs */
+
+.fs-fields input.check {
+	display: block;
+	margin: 0;
+	padding: 0 0 0.15em;
+	width: 90px;
+	border: none;
+	border-bottom: 2px solid rgba(0,0,0,0.2);
+	background-color: transparent;
+	color: #777;
+	text-overflow: ellipsis;
+	font-weight: bold;
+	font-size: 1.5em;
+	border-radius: 0;
+	border-color: blue
+}
+
 .fs-fields input {
 	display: block;
 	margin: 0;

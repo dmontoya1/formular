@@ -23,7 +23,7 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
         <div class="container">
-            <h3>Seleccionar una empresa</h3>
+            <h1 class="title-1">Seleccionar una <strong>Empresa</strong></h1>
             <p>Para continuar debes seleccionar una empresa, o crear una si no la encuentras </p>
         </div>
     </div>
@@ -34,15 +34,15 @@
         <form method="POST" action="{% url 'webclient:gathering-form' %}" id="select_company_form" class="form-horizontal">
             {% csrf_token %}
             <div class="form-group">
-                <label for="select_company">Selecciona una empresa</label>
+                <label for="select_company" style="font-size: 1.5em;">Selecciona una empresa</label>
                 <select class="form-control" name="company_id" id="select_company"
                         data-validation="required"
                         data-validation-error-msg="Debes seleccionar una empresa">
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Seleccionar</button>
             <div class="float-right">
-                <a class="btn btn-primary text-white" data-toggle="modal" data-target="#modal-company">Crear Empresa</a>
+                <button type="submit" class="btn btn-flat">Seleccionar</button>
+                <a class="btn btn-wrapper-white" data-toggle="modal" data-target="#modal-company">Crear Empresa</a>
             </div>
         </form>
         
@@ -59,7 +59,7 @@
                 <div class="modal-header">
                     <h2 class="modal-title" id="modal-loginLabel">Nueva Empresa</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span class="text-white" aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -112,7 +112,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Crear</button>
+                    <button type="submit" class="btn btn-flat">Crear</button>
                     </form>
                 </div>
             </div>

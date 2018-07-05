@@ -174,6 +174,7 @@ def export_form_pdf(request, form_id=None):
     form = Form.objects.get(pk=form_id)
     context = {
         'headers': (
+            'Categoría',
             'Pregunta',
             'Respuesta',
         ),

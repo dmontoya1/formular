@@ -400,7 +400,7 @@
 						.done(function(data){
 							swal({
 								type: 'success',
-								title: 'Formulario grabado exitosamente',
+								title: 'Formulario almacenado exitosamente',
 								text: data.risk
 							}).then((result) => {
 								window.location.replace("{% url 'webclient:form-history' %}");

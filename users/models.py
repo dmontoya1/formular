@@ -52,14 +52,14 @@ class Company(models.Model):
     """
 
     name = models.CharField("Nombre", max_length=255)
-    nit = models.CharField("NIT", max_length=12)
+    nit = models.CharField("NIT", max_length=12, blank=True, null=True)
     email = models.EmailField("Email", max_length=254)
-    phone_number = models.CharField("Número telefónico", max_length=10)
-    address = models.CharField("Dirección", max_length=255)
+    phone_number = models.CharField("Número telefónico", max_length=10, blank=True, null=True)
+    address = models.CharField("Dirección", max_length=255, blank=True, null=True)
     contact_person_name = models.CharField("Nombre persona de contacto", max_length=255)
-    contact_person_email = models.EmailField("Email persona de contacto", max_length=255)
-    contact_person_charge = models.CharField("Cargo persona de contacto", max_length=255)
-    contact_person_phone = models.CharField("Número telefónico persona de contacto", max_length=10)
+    contact_person_email = models.EmailField("Email persona de contacto", max_length=255, blank=True, null=True)
+    contact_person_charge = models.CharField("Cargo persona de contacto", max_length=255, blank=True, null=True)
+    contact_person_phone = models.CharField("Número telefónico persona de contacto", max_length=10, blank=True, null=True)
     website = models.URLField("Sitio Web", max_length=255, blank=True, null=True)
 
     def __str__(self):

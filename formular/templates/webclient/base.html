@@ -28,13 +28,13 @@
             </button>
     
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-                {% block nav_buttons %}
-                {% endblock %}
                 {% if request.user.is_anonymous %}
                     <button type="button" class="btn btn-flat" data-toggle="modal" data-target="#modal-login">
                         Iniciar Sesión
                     </button>
                 {% else %}
+                    {% block nav_buttons %}
+                    {% endblock %}
                     <br>
                     <span class="text-white">Bienvenido, {{ request.user.get_full_name }}</span>
                     <a href="/logout/" id="Logout" class="btn btn-semiflat">Cerrar sesión</a>

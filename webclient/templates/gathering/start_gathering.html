@@ -17,11 +17,26 @@
 
 {% block content %}
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-        <div class="container">
-            <h1 class="display-4">Comenzar Formulario</h1>
-            <p>Desde aqui podrás comenzar una nueva toma de requerimientos</p>
-            <p><a class="btn btn-flat btn-lg" href="{% url 'webclient:select-company' %}" role="button">Ir al formulario &raquo;</a></p>
+    {% if request.user.is_anonymous %}
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="title-2">Iniciar</h1>
+                <h1 class="title-1">Sesión</h1>
+                <p>Primero debes iniciar sesión antes de continuar</p>
+                <button type="button" class="btn btn-flat" data-toggle="modal" data-target="#modal-login">
+                    Iniciar Sesión
+                </button>
+            </div>
         </div>
-    </div>
+        
+    {% else %}
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="title-2">Comenzar</h1>
+                <h1 class="title-1">Formulario</h1>
+                <p>Desde aqui podrás comenzar una nueva toma de requerimientos</p>
+                <p><a class="btn btn-flat btn-lg" href="{% url 'webclient:select-company' %}" role="button">Ir al formulario &raquo;</a></p>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
